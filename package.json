@@ -1,0 +1,24 @@
+{
+  "name": "gigsmart-oauth-test-client",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db": "docker compose up -d --wait",
+    "cert": "mkdir -p .cert && openssl req -x509 -newkey rsa:2048 -nodes -days 365 -subj /CN=localhost -addext subjectAltName=DNS:localhost -keyout .cert/key.pem -out .cert/cert.pem",
+    "build": "vite build web",
+    "start": "npm run build && node --env-file=${ENV_FILE:-.env} server/index.js",
+    "start:local": "ENV_FILE=.env.local npm start",
+    "register:local": "set -a && . ./.env.local && set +a && mise exec -C \"$GIGSMART_API_DIR\" -- mix run --no-start \"$PWD/scripts/register-local-app.exs\"",
+    "test": "node --test 'server/*.test.js'"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "vite": "^7.1.0"
+  }
+}
